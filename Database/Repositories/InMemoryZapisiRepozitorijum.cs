@@ -7,15 +7,44 @@ namespace Database.Repositories;
 // TODO: implementirati skladištenje u memoriji.
 public sealed class InMemoryZapisiRepozitorijum : IZapisiRepozitorijum
 {
-    public Result Sacuvaj(Zapis zapis) =>
-        Result.Failure("repo.nije_implementirano", "Implementirati cuvanje u memoriji.");
+    private readonly List<Zapis> _zapisi = new();
+    public Result Sacuvaj(Zapis zapis) {
+       if(zapis is null)
+        {
+            return Result.Failure("zapis_null", "Zapis ne sme biti null.");
+        }
+        var postojeci = _zapisi.FirstOrDefault(z => z.Id == zapis.Id);
+        if (postojeci != null)
+        {
+           _zapisi.Remove(postojeci);
+        }
+        _zapisi.Add(zapis);
+        return Result.Success();
+    }
 
-    public Result<Zapis> Pronadji(Guid id) =>
-        Result<Zapis>.Failure("repo.nije_implementirano", "Implementirati pretragu po ID-u.");
+    public Result<Zapis> Pronadji(Guid id)
+    {
+        var zapis = _zapisi.FirstOrDefault(z => z.Id == id);
+        if (zapis is null)
+        {
+            return Result<Zapis>.Failure("zapis.nije.pronadjen", "Zapis sa datim ID-jem ne postoji.");
+        }
+        return Result<Zapis>.Success(zapis);
+    }
 
-    public Result<IReadOnlyList<Zapis>> Svi() =>
-        Result<IReadOnlyList<Zapis>>.Failure("repo.nije_implementirano", "Implementirati pregled.");
+    public Result<IReadOnlyList<Zapis>> Svi()
+    {
+        return Result<IReadOnlyList<Zapis>>.Success(_zapisi.AsReadOnly());
+    }
 
-    public Result Obrisi(Guid id) =>
-        Result.Failure("repo.nije_implementirano", "Implementirati brisanje.");
+    public Result Obrisi(Guid id)
+    {
+        var zapis = _zapisi.FirstOrDefault(z => z.Id == id);
+        if (zapis is null)
+        {
+            return Result.Failure("zapis.nije.pronadjen", "Zapis sa datim ID-jem ne postoji.");
+        }
+        _zapisi.Remove(zapis);
+        return Result.Success();
+    }
 }
