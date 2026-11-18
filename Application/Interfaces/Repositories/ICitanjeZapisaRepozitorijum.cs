@@ -1,0 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Domain.Models;
+
+namespace Application.Interfaces.Repositories
+{
+    public interface ICitanjeZapisaRepozitorijum
+    {
+        IEnumerable<Zapis> VratiSve();
+        Zapis? VratiPoId(Guid id);
+
+        IEnumerable<Zapis> PronadjiPoIzvodjacu(string izvodjac);
+
+    }
+}

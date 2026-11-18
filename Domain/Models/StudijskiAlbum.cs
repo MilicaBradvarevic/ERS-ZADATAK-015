@@ -8,7 +8,6 @@ namespace Domain.Models
 {
     public class StudijskiAlbum:Zapis
     {
-        public string Izvodjac { get; set; } = string.Empty;
         public int IzdanjeGodina { get; set; }
         public string IzdavackaKuca { get; set; } = string.Empty;
     }
